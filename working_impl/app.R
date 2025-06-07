@@ -43,7 +43,7 @@ server <- function(input, output, session) {
     selectInput(
       "column_select",
       "Select a column:",
-      choices = c("Select something to get started" = "", names(dataset())),
+      choices = c("Select a column to get started" = "", names(dataset())),
       multiple = TRUE
     )
   })
