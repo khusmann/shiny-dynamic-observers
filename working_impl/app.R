@@ -20,8 +20,8 @@ ui <- fluidPage(
   div(
     class = "centered-content",
     selectInput(
-      "dataset_select",
-      "Select a dataset:",
+      inputId = "dataset_select",
+      label = "Select a dataset:",
       choices = c("iris", "mtcars")
     ),
     uiOutput("column_select_ui"),
@@ -41,8 +41,8 @@ server <- function(input, output, session) {
 
   output$column_select_ui <- renderUI({
     selectInput(
-      "column_select",
-      "Select a column:",
+      inputId = "column_select",
+      label = "Select a column:",
       choices = c("Select a column to get started" = "", names(dataset())),
       multiple = TRUE
     )
@@ -69,6 +69,7 @@ server <- function(input, output, session) {
         )
       })
     )
+
     lapply(input$column_select, function(i) {
       fluidRow(
         class = "card",
@@ -80,8 +81,8 @@ server <- function(input, output, session) {
         column(
           width = 2,
           actionButton(
-            paste0(i, "_close"),
-            "\u2716",
+            inputId = paste0(i, "_close"),
+            label = "\u2716",
             class = "btn btn-danger"
           )
         )
