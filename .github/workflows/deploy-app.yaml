@@ -4,12 +4,8 @@
 name: Deploy app
 
 on:
-  workflow_call:
-    inputs:
-      cache-version:
-        type: string
-        default: "1"
-        required: false
+  push:
+    branches: [main]
 
 jobs:
   build:
@@ -23,7 +19,7 @@ jobs:
 
       - uses: rstudio/shiny-workflows/setup-r-package@v1
         with:
-          cache-version: ${{ github.event.inputs.cache-version }}
+          cache-version: "1" # Increment this when updating renv
 
       - name: Activate renv
         shell: Rscript {0}
