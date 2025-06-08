@@ -4,6 +4,12 @@ library(glue)
 
 source("styles.R")
 
+all_datasets <- ls("package:datasets") |>
+  set_names() |>
+  map(\(x) get(x, "package:datasets")) |>
+  keep(is.data.frame) |>
+  map(\(x) keep(x, is.numeric))
+
 ui <- fluidPage(
   tags$head(tags$style(app_styles)),
   div(
@@ -12,7 +18,7 @@ ui <- fluidPage(
     selectInput(
       inputId = "dataset_select",
       label = "Select a dataset:",
-      choices = c("iris", "mtcars"),
+      choices = names(all_datasets),
       width = "100%"
     ),
     uiOutput("column_select_ui"),
@@ -24,9 +30,7 @@ server <- function(input, output, session) {
   dynamic_observers <- reactiveVal(list())
 
   dataset <- shiny::reactive({
-    input$dataset_select |>
-      get(envir = asNamespace("datasets")) |>
-      keep(is.numeric)
+    all_datasets[[input$dataset_select]]
   })
 
   output$column_select_ui <- renderUI({
