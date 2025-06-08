@@ -20,6 +20,8 @@ ui <- fluidPage(
   tags$head(tags$style(app_styles)),
   div(
     class = "centered-content",
+    tags$h3("Working Example"),
+    tags$hr(),
     selectInput(
       inputId = "dataset_select",
       label = "Select a dataset:",
