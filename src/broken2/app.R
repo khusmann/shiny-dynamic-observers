@@ -9,7 +9,6 @@ ui <- fluidPage(
   div(
     class = "centered-content",
     tags$h3("Attempt #2"),
-    tags$hr(),
     selectInput(
       inputId = "dataset_select",
       label = "Select a dataset:",
@@ -17,7 +16,7 @@ ui <- fluidPage(
       width = "100%"
     ),
     uiOutput("column_select_ui"),
-    uiOutput("cards_ui"),
+    uiOutput("cards_ui", class = "card-container"),
     tags$div(
       class = "message-container",
       verbatimTextOutput("messages_text")
@@ -58,21 +57,18 @@ server <- function(input, output, session) {
   })
 
   output$cards_ui <- renderUI({
-    tags$div(
-      class = "card-container",
-      map(rev(input$column_select), function(i) {
-        i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
-        tags$div(
-          class = "card",
-          tags$div(tags$strong(i), glue("(mean: {i_mean})")),
-          actionButton(
-            inputId = glue("{i}_close"),
-            label = "\u2716",
-            class = "btn btn-xs btn-danger"
-          )
+    map(rev(input$column_select), function(i) {
+      i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
+      tags$div(
+        class = "card",
+        tags$div(tags$strong(i), glue("(mean: {i_mean})")),
+        actionButton(
+          inputId = glue("{i}_close"),
+          label = "\u2716",
+          class = "btn btn-xs btn-danger"
         )
-      })
-    )
+      )
+    })
   })
 
   observe({

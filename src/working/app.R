@@ -22,7 +22,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   dynamic_observers <- reactiveVal(list())
-  
+
   dataset <- shiny::reactive({
     input$dataset_select |>
       get(envir = asNamespace("datasets")) |>
@@ -41,18 +41,18 @@ server <- function(input, output, session) {
   })
 
   output$cards_ui <- renderUI({
-      map(rev(input$column_select), function(i) {
-        i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
-        tags$div(
-          class = "card",
-          tags$div(tags$strong(i), glue("(mean: {i_mean})")),
-          actionButton(
-            inputId = glue("{i}_close"),
-            label = "\u2716",
-            class = "btn btn-xs btn-danger"
-          )
+    map(rev(input$column_select), function(i) {
+      i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
+      tags$div(
+        class = "card",
+        tags$div(tags$strong(i), glue("(mean: {i_mean})")),
+        actionButton(
+          inputId = glue("{i}_close"),
+          label = "\u2716",
+          class = "btn btn-xs btn-danger"
         )
-      })
+      )
+    })
   })
 
   observe({

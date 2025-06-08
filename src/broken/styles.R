@@ -1,15 +1,26 @@
 app_styles <- HTML("
+html, body, .container-fluid {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .centered-content {
+  display: flex;
+  flex-direction: column;
   max-width: 48rem;
   margin: 0 auto;
+  height: 100%;
 }
+
 .card-container {
-  height: 100px;
-  margin-bottom: 10px;
+  flex: 1;
+  margin-bottom: 15px;
   overflow-y: scroll;
   border: 1px solid #ccc;
   padding: 4px;
 }
+
 .card {
   display: flex;
   align-items: center;
@@ -19,6 +30,7 @@ app_styles <- HTML("
   margin: 0px;
   margin-bottom: 3px;
 }
+
 .message-container {
   height: 100px;
   overflow-y: auto;
