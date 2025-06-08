@@ -33,8 +33,14 @@ html, body, .container-fluid {
 
 .message-container {
   height: 100px;
-  overflow-y: auto;
   border: 0px solid #ccc;
   padding: 0px;
+  margin-bottom: 15px;
+}
+
+.message-container pre {
+  height: 100%;
+  overflow-y: scroll;
+  box-sizing: border-box;
 }
 ")
