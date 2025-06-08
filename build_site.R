@@ -19,4 +19,7 @@ for (app in apps) {
   )
 }
 
+options(litedown.html.template = TRUE)
+litedown::mark("README.md", file.path(out_dir, "index.html"))
+
 cat('View the site with httpuv::runStaticServer("build")')
