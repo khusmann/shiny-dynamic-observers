@@ -9,7 +9,7 @@ apps <- list.dirs(src_dir, full.names = FALSE, recursive = FALSE)
 
 for (app in apps) {
   input_path <- file.path(src_dir, app)
-  
+
   message("Exporting ", app, "...")
   shinylive::export(
     appdir = input_path,
