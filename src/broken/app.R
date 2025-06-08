@@ -5,6 +5,7 @@ library(glue)
 source("styles.R")
 
 all_datasets <- ls("package:datasets") |>
+  sort() |>
   set_names() |>
   map(\(x) get(x, "package:datasets")) |>
   keep(is.data.frame)
