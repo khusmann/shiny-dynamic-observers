@@ -5,7 +5,8 @@ if (!dir.exists(out_dir)) {
   dir.create(out_dir)
 }
 
-apps <- list.dirs(src_dir, full.names = FALSE, recursive = FALSE)
+apps <- list.dirs(src_dir, full.names = FALSE, recursive = FALSE) |>
+  purrr::discard(\(i) substr(i, 1, 1) == "_")
 
 for (app in apps) {
   input_path <- file.path(src_dir, app)
