@@ -9,7 +9,6 @@ ui <- fluidPage(
   div(
     class = "centered-content",
     tags$h3("Dynamic Observer Demo"),
-    tags$hr(),
     selectInput(
       inputId = "dataset_select",
       label = "Select a dataset:",
@@ -17,7 +16,7 @@ ui <- fluidPage(
       width = "100%"
     ),
     uiOutput("column_select_ui"),
-    uiOutput("cards_ui")
+    uiOutput("cards_ui", class = "card-container")
   )
 )
 
@@ -42,8 +41,6 @@ server <- function(input, output, session) {
   })
 
   output$cards_ui <- renderUI({
-    tags$div(
-      class = "card-container",
       map(rev(input$column_select), function(i) {
         i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
         tags$div(
@@ -56,7 +53,6 @@ server <- function(input, output, session) {
           )
         )
       })
-    )
   })
 
   observe({
