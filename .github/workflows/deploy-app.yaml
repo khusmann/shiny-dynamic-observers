@@ -26,16 +26,9 @@ jobs:
           sudo apt-get install -y \
             libarchive-dev \
             libcurl4-openssl-dev
-
-      - name: Activate renv
-        shell: Rscript {0}
-        run: |
-          source(".Rprofile")
-          
-      - name: Install packages
-        shell: Rscript {0}
-        run: |
-          renv::restore()
+            
+      - name: Setup renv
+        uses: r-lib/actions/setup-renv@v2
 
       - name: Build site
         shell: Rscript {0}
