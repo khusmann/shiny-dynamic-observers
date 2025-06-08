@@ -7,8 +7,7 @@ source("styles.R")
 all_datasets <- ls("package:datasets") |>
   set_names() |>
   map(\(x) get(x, "package:datasets")) |>
-  keep(is.data.frame) |>
-  map(\(x) keep(x, is.numeric))
+  keep(is.data.frame)
 
 ui <- fluidPage(
   tags$head(tags$style(app_styles)),
@@ -62,10 +61,15 @@ server <- function(input, output, session) {
 
   output$cards_ui <- renderUI({
     map(rev(input$column_select), function(i) {
-      i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
+      if (is.numeric(dataset()[[i]])) {
+        i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
+        extra <- glue("(mean: {i_mean})")
+      } else {
+        extra <- NULL
+      }
       tags$div(
         class = "card",
-        tags$div(tags$strong(i), glue("(mean: {i_mean})")),
+        tags$div(tags$strong(i), extra),
         actionButton(
           inputId = glue("{i}_close"),
           label = "\u2716",
