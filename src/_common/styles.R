@@ -11,7 +11,7 @@ html, body, .container-fluid {
   max-width: 48rem;
   margin: 0 auto;
   height: 100%;
-  padding: 0 5px;
+  padding: 0 10px;
 }
 
 .card-container {
