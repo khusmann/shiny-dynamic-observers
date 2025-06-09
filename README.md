@@ -8,7 +8,7 @@
 An example repo to show the trials and tribulations of creating dynamic
 observers in Shiny (blog post incoming)
 
-Available demos:
+## Available demos
 
 [attempt1](https://khusmann.github.io/shiny-dynamic-observers/attempt1/index.html)
 

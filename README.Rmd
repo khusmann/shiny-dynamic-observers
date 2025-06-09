@@ -21,7 +21,7 @@ library(glue)
 An example repo to show the trials and tribulations of creating dynamic
 observers in Shiny (blog post incoming)
 
-Available demos:
+## Available demos
 
 ```{r, echo = FALSE, results = 'asis'}
 src_dir <- "src"
