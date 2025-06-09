@@ -5,7 +5,7 @@ library(glue)
 source("styles.R")
 
 all_datasets <- ls("package:datasets") |>
-  sort() |>
+  (\(v) v[order(tolower(v), v)])() |> # Case insensitive ordering
   set_names() |>
   map(\(x) get(x, "package:datasets")) |>
   keep(is.data.frame)
