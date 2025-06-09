@@ -21,7 +21,14 @@ ui <- fluidPage(
       choices = names(all_datasets),
       width = "100%"
     ),
-    uiOutput("column_select_ui"),
+    selectizeInput(
+      inputId = "column_select",
+      label = "Select a column:",
+      choices = c("Select a column to get started" = ""),
+      multiple = TRUE,
+      width = "100%",
+      options = list(closeAfterSelect = TRUE)
+    ),
     uiOutput("cards_ui", class = "card-container")
   )
 )
@@ -31,14 +38,10 @@ server <- function(input, output, session) {
     all_datasets[[input$dataset_select]]
   })
 
-  output$column_select_ui <- renderUI({
-    selectizeInput(
+  observe({
+    updateSelectizeInput(
       inputId = "column_select",
-      label = "Select a column:",
       choices = c("Select a column to get started" = "", names(dataset())),
-      multiple = TRUE,
-      width = "100%",
-      options = list(closeAfterSelect = TRUE)
     )
   })
 
