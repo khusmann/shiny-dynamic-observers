@@ -10,7 +10,7 @@ screenshot_shiny_app <- function(
     width = 576,
     height = 450,
     port = 1234,
-    wait_time = 20) {
+    wait_time = 30) {
   url <- sprintf("http://127.0.0.1:%d", port)
 
   message("Launching app: ", app_path)
