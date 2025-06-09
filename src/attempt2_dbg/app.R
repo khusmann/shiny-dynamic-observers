@@ -14,7 +14,7 @@ ui <- fluidPage(
   tags$head(tags$style(app_styles)),
   div(
     class = "centered-content",
-    tags$h3("Attempt #2"),
+    tags$h3("Attempt #2 (with logging)"),
     selectInput(
       inputId = "dataset_select",
       label = "Select a dataset:",

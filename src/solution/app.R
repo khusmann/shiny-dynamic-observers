@@ -14,7 +14,7 @@ ui <- fluidPage(
   tags$head(tags$style(app_styles)),
   div(
     class = "centered-content",
-    tags$h3("Dynamic Observer Demo"),
+    tags$h3("The Solution"),
     selectInput(
       inputId = "dataset_select",
       label = "Select a dataset:",
@@ -29,11 +29,29 @@ ui <- fluidPage(
       width = "100%",
       options = list(closeAfterSelect = TRUE)
     ),
-    uiOutput("cards_ui", class = "card-container")
+    uiOutput("cards_ui", class = "card-container"),
+    tags$div(
+      class = "message-container",
+      verbatimTextOutput("messages_text")
+    )
   )
 )
 
 server <- function(input, output, session) {
+  messages <- shiny::reactiveVal(list(n = 1, msg = "Messages will log here\n"))
+
+  appendMessage <- function(msg) {
+    old_message <- isolate(messages())
+    messages(
+      list(
+        n = old_message$n + 1,
+        msg = glue("({old_message$n}) {msg}\n{old_message$msg}")
+      )
+    )
+  }
+
+  output$messages_text <- renderText(messages()$msg)
+
   dataset <- shiny::reactive({
     all_datasets[[input$dataset_select]]
   })
@@ -72,8 +90,8 @@ server <- function(input, output, session) {
 
     new_observers <- map(input$column_select, function(i) {
       close_btn_id <- paste0(i, "_close")
-      observeEvent(input[[close_btn_id]],
-        {
+      observeEvent(input[[close_btn_id]], {
+          appendMessage(glue("Closing {i}"))
           updateSelectInput(
             inputId = "column_select",
             selected = discard(input$column_select, \(j) j == i)
@@ -82,7 +100,6 @@ server <- function(input, output, session) {
         ignoreInit = TRUE
       )
     })
-
     dynamic_observers(new_observers)
   })
 }
