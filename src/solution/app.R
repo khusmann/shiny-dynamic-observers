@@ -90,7 +90,8 @@ server <- function(input, output, session) {
 
     new_observers <- map(input$column_select, function(i) {
       close_btn_id <- paste0(i, "_close")
-      observeEvent(input[[close_btn_id]], {
+      observeEvent(input[[close_btn_id]],
+        {
           appendMessage(glue("Closing {i}"))
           updateSelectInput(
             inputId = "column_select",
