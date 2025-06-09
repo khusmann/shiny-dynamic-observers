@@ -69,7 +69,7 @@ server <- function(input, output, session) {
     })
   })
 
-  observe({
+  observeEvent(input$column_select, {
     walk(input$column_select, function(i) {
       close_btn_id <- glue("{i}_close")
       observeEvent(

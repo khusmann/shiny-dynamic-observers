@@ -67,7 +67,7 @@ server <- function(input, output, session) {
     })
   })
 
-  observe({
+  observeEvent(input$column_select, {
     walk(isolate(dynamic_observers()), \(i) i$destroy())
 
     dynamic_observers(
