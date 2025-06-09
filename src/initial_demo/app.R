@@ -34,7 +34,6 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  dynamic_observers <- reactiveVal(list())
 
   dataset <- shiny::reactive({
     all_datasets[[input$dataset_select]]
@@ -66,9 +65,11 @@ server <- function(input, output, session) {
       )
     })
   })
+  
+  dynamic_observers <- reactiveVal(list())
 
   observeEvent(input$column_select, {
-    walk(isolate(dynamic_observers()), \(i) i$destroy())
+    walk(dynamic_observers(), \(i) i$destroy())
 
     dynamic_observers(
       map(input$column_select, function(i) {
@@ -81,8 +82,7 @@ server <- function(input, output, session) {
               selected = discard(input$column_select, \(j) j == i)
             )
           },
-          #ignoreInit = TRUE,
-          ignoreNULL = FALSE
+          ignoreInit = TRUE,
         )
       })
     )
