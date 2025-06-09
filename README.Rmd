@@ -1,0 +1,40 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(purrr)
+library(glue)
+```
+
+# shiny-dynamic-observers
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+An example repo to show the trials and tribulations of creating dynamic
+observers in Shiny (blog post incoming)
+
+Available demos:
+
+```{r, echo = FALSE, results = 'asis'}
+src_dir <- "src"
+
+apps <- list.dirs(src_dir, full.names = FALSE, recursive = FALSE) |>
+  purrr::discard(\(i) substr(i, 1, 1) == "_")
+
+walk(apps, function(i) {
+  cat(
+    glue(
+      "[{i}](https://khusmann.github.io/shiny-dynamic-observers",
+      "/{i}/index.html)\n\n\n"
+    )
+  )
+})
+```
