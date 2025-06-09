@@ -81,7 +81,8 @@ server <- function(input, output, session) {
               selected = discard(input$column_select, \(j) j == i)
             )
           },
-          ignoreInit = TRUE,
+          #ignoreInit = TRUE,
+          ignoreNULL = FALSE
         )
       })
     )
