@@ -30,6 +30,11 @@ jobs:
       - name: Setup renv
         uses: r-lib/actions/setup-renv@v2
 
+      - name: Render previews
+        shell: Rscript {0}
+        run: |
+          source("render_previews.R")
+
       - name: Build site
         shell: Rscript {0}
         run: |
