@@ -47,15 +47,9 @@ server <- function(input, output, session) {
 
   output$cards_ui <- renderUI({
     map(rev(input$column_select), function(i) {
-      if (is.numeric(dataset()[[i]])) {
-        i_mean <- round(mean(dataset()[[i]], na.rm = TRUE), 2)
-        extra <- glue("(mean: {i_mean})")
-      } else {
-        extra <- NULL
-      }
       tags$div(
         class = "card",
-        tags$div(tags$strong(i), extra),
+        tags$div(tags$strong(i), glue("({class(dataset()[[i]])[1]})")),
         actionButton(
           inputId = glue("{i}_close"),
           label = icon("times"),
