@@ -5,8 +5,13 @@ library(httr)
 
 # Path to your app (can be ".")
 app_dir <- "src/solution"
+out_dir <- "build"
 port <- 1234
 url <- sprintf("http://127.0.0.1:%d", port)
+
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir)
+}
 
 # Start the app in background
 shiny_proc <- process$new(
@@ -17,6 +22,7 @@ shiny_proc <- process$new(
 
 # Wait for the app to start (check up to 20 times)
 for (i in 1:20) {
+  print(paste0("Attempt ", i))
   Sys.sleep(1)
   result <- tryCatch(GET(url), error = function(e) NULL)
   if (!is.null(result) && status_code(result) == 200) {
