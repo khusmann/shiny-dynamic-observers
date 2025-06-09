@@ -2,37 +2,71 @@ library(shiny)
 library(webshot2)
 library(processx)
 library(httr)
+library(purrr)
 
-# Path to your app (can be ".")
-app_dir <- "src/solution"
-out_dir <- "build"
-port <- 1234
-url <- sprintf("http://127.0.0.1:%d", port)
+screenshot_shiny_app <- function(
+    app_path,
+    output_file,
+    width = 576,
+    height = 450,
+    port = 1234,
+    wait_time = 20) {
+  url <- sprintf("http://127.0.0.1:%d", port)
 
-if (!dir.exists(out_dir)) {
-  dir.create(out_dir)
-}
+  message("Launching app: ", app_path)
 
-# Start the app in background
-shiny_proc <- process$new(
-  "Rscript",
-  c("-e", sprintf("shiny::runApp('%s', port=%d, launch.browser=FALSE)", app_dir, port)),
-  stdout = "|", stderr = "|"
-)
+  shiny_proc <- process$new(
+    "Rscript",
+    c("-e", sprintf("shiny::runApp('%s', port=%d, launch.browser=FALSE)", app_path, port)),
+    stdout = "|", stderr = "|"
+  )
 
-# Wait for the app to start (check up to 20 times)
-for (i in 1:20) {
-  print(paste0("Attempt ", i))
-  Sys.sleep(1)
-  result <- tryCatch(GET(url), error = function(e) NULL)
-  if (!is.null(result) && status_code(result) == 200) {
-    break
+  # Wait for the app to start
+  for (i in seq_len(wait_time)) {
+    Sys.sleep(1)
+    result <- tryCatch(GET(url), error = function(e) NULL)
+    if (!is.null(result) && status_code(result) == 200) {
+      message("App started at attempt ", i)
+      break
+    }
+    if (i == wait_time) {
+      shiny_proc$kill()
+      stop("App did not start in time: ", app_path)
+    }
   }
-  if (i == 20) stop("App did not start in time")
+
+  # Take screenshot
+  webshot(url, file = output_file, vwidth = width, vheight = height)
+
+  # Kill the app
+  shiny_proc$kill()
+  message("Saved preview to: ", output_file)
 }
 
-# Take screenshot
-webshot(url, file = "build/preview.png", vwidth = 576, vheight = 450)
+# -- Run for all apps in src/solution/ that don't start with "_" --
 
-# Kill the app
-shiny_proc$kill()
+app_dir <- "src"
+out_dir <- "build"
+
+
+# Get subdirectories not starting with "_"
+shiny_apps <- list.dirs(app_dir, recursive = FALSE, full.names = TRUE) |>
+  keep(\(x) !startsWith(basename(x), "_"))
+
+# Launch and screenshot each app
+iwalk(shiny_apps, function(app_path, i) {
+  port <- 1234 + i
+  app_name <- basename(app_path)
+  out_file_dir <- file.path(out_dir, app_name)
+  out_file <- file.path(out_file_dir, "preview.png")
+
+  if (!dir.exists(out_file_dir)) dir.create(out_file_dir, recursive = TRUE)
+  
+  screenshot_shiny_app(
+    app_path,
+    out_file,
+    port = port,
+    width = 576,
+    height = 450
+  )
+})
