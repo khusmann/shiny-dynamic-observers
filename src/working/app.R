@@ -57,7 +57,7 @@ server <- function(input, output, session) {
         tags$div(tags$strong(i), extra),
         actionButton(
           inputId = glue("{i}_close"),
-          label = "\u2716",
+          label = icon("times"),
           class = "btn btn-xs btn-danger"
         )
       )
